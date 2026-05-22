@@ -35,7 +35,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        // Seguimos usando esto porque tus claves en BD son texto plano ('123')
+        // Seguimos usando esto porque mis claves en la BD son texto plano ('123') para prueba, luego sera cifrado de contraseña
         return NoOpPasswordEncoder.getInstance();
     }
 }
