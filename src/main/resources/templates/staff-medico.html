@@ -2,26 +2,534 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Staff Médico - Clínica Socorro</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Médico - Clínica María del Socorro</title>
+    <meta name="description" content="Conoce a nuestro equipo de médicos especialistas en la Clínica María del Socorro. Profesionales de primer nivel comprometidos con tu salud.">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --accent: #f43f5e;
+            --text-main: #0f172a;
+            --text-body: #475569;
+            --bg-light: #f8fafc;
+            --font-display: 'Outfit', sans-serif;
+            --font-base: 'Poppins', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-base);
+            color: var(--text-main);
+            background-color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 700;
+        }
+
+        /* ─── NAVBAR ─── */
+        .navbar {
+            background-color: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(226,232,240,0.8);
+            transition: var(--transition);
+            padding: 15px 0;
+        }
+        .navbar.scrolled {
+            padding: 10px 0;
+            box-shadow: 0 4px 20px -2px rgba(0,0,0,0.06);
+        }
+        .nav-link {
+            color: var(--text-body) !important;
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 8px 16px !important;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary) !important;
+            background-color: var(--primary-light);
+        }
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border: none;
+            color: white !important;
+            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 30px;
+            box-shadow: 0 4px 14px 0 rgba(2,132,199,0.3);
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(2,132,199,0.4);
+        }
+
+        /* ─── HERO ─── */
+        .staff-hero {
+            background: linear-gradient(135deg, #0f172a 0%, #0369a1 60%, #0284c7 100%);
+            padding: 110px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        .staff-hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .staff-hero .badge-pill {
+            background: rgba(255,255,255,0.15);
+            color: #bae6fd;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: inline-block;
+            margin-bottom: 18px;
+        }
+        .staff-hero h1 {
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            color: white;
+            margin-bottom: 16px;
+        }
+        .staff-hero h1 span {
+            background: linear-gradient(90deg, #38bdf8, #7dd3fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .staff-hero p {
+            color: #94a3b8;
+            font-size: 1.05rem;
+            max-width: 560px;
+        }
+        .hero-stat {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 20px 28px;
+            text-align: center;
+        }
+        .hero-stat .num {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 800;
+            color: #38bdf8;
+            line-height: 1;
+        }
+        .hero-stat .label {
+            color: #94a3b8;
+            font-size: 0.82rem;
+            margin-top: 4px;
+        }
+
+        /* ─── SECTION ─── */
+        .staff-section {
+            padding: 80px 0;
+            background: var(--bg-light);
+        }
+        .section-eyebrow {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .section-title {
+            font-size: clamp(1.6rem, 3vw, 2.4rem);
+            color: var(--text-main);
+            margin-top: 8px;
+        }
+
+        /* ─── DOCTOR CARD ─── */
+        .doctor-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(15,23,42,0.06);
+            transition: var(--transition);
+            border: 1px solid rgba(226,232,240,0.8);
+            height: 100%;
+        }
+        .doctor-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 16px 40px rgba(2,132,199,0.14);
+            border-color: rgba(2,132,199,0.2);
+        }
+        .doctor-avatar {
+            background: linear-gradient(135deg, var(--primary-light) 0%, #dbeafe 100%);
+            padding: 32px 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .avatar-circle {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 800;
+            color: white;
+            box-shadow: 0 8px 24px rgba(2,132,199,0.3);
+            margin-bottom: 12px;
+        }
+        .status-badge {
+            background: #dcfce7;
+            color: #166534;
+            font-size: 0.73rem;
+            font-weight: 600;
+            padding: 3px 12px;
+            border-radius: 50px;
+            border: 1px solid #bbf7d0;
+        }
+        .doctor-body {
+            padding: 22px 24px 26px;
+        }
+        .doctor-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+        .doctor-specialty {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-size: 0.78rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 14px;
+        }
+        .doctor-info-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: var(--text-body);
+        }
+        .doctor-info-row i {
+            color: var(--primary);
+            font-size: 1rem;
+            margin-top: 1px;
+            flex-shrink: 0;
+        }
+        .doctor-divider {
+            border: none;
+            height: 1px;
+            background: #f1f5f9;
+            margin: 14px 0;
+        }
+        .doctor-action {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .btn-cita {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-cita:hover {
+            background: var(--primary-dark);
+            color: white;
+            transform: translateY(-1px);
+        }
+        .doctor-id {
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* ─── EMPTY STATE ─── */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+        }
+        .empty-icon {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        .empty-icon i {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            background-color: #0f172a;
+            color: #94a3b8;
+            padding: 60px 0 30px;
+            border-top: 1px solid #1e293b;
+        }
+        .footer-title {
+            color: white;
+            font-size: 1.05rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        .footer-logo { filter: brightness(0) invert(1); max-height: 40px; margin-bottom: 16px; }
+        .footer-links { list-style: none; padding: 0; margin: 0; }
+        .footer-links li { margin-bottom: 10px; }
+        .footer-links a { color: #94a3b8; text-decoration: none; transition: var(--transition); font-size: 0.9rem; }
+        .footer-links a:hover { color: white; padding-left: 4px; }
+        .copyright { border-top: 1px solid #1e293b; padding-top: 24px; margin-top: 50px; font-size: 0.85rem; }
+
+        /* ─── RESPONSIVE ─── */
+        @media (max-width: 991.98px) {
+            .staff-hero { padding: 90px 0 60px; }
+        }
+    </style>
 </head>
-<body class="container mt-5">
-    <h1 class="mb-4">Nuestro Staff Médico</h1>
-    
-    <div class="row">
-        <div class="col-md-4" th:each="u : ${medicos}">
-            <div class="card mb-4 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title" th:text="${u.persona.nombres + ' ' + u.persona.apellidos}">Nombre del Médico</h5>
-                    <p class="card-text">
-                        <strong>Correo:</strong> <span th:text="${u.persona.correo}">correo@ejemplo.com</span><br>
-                        <strong>Especialidad:</strong> <span class="badge bg-primary">Médico General</span>
-                    </p>
+<body>
+
+    <!-- ═══════════════════════════════════════
+         NAVBAR (igual que index.html)
+    ═══════════════════════════════════════ -->
+    <nav class="navbar navbar-expand-lg sticky-top" id="mainNavbar">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
+                <img th:src="@{/img/logo.jpg}" alt="Clínica María del Socorro" height="45">
+            </a>
+            <button class="navbar-toggler border-0" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Nosotros</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/staff}">Staff Médico</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}#especialidades">Especialidades</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="d-none d-lg-flex align-items-center">
+                <a th:href="@{/login}" class="btn btn-primary-custom">INICIAR SESIÓN</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════
+         HERO SECTION
+    ═══════════════════════════════════════ -->
+    <section class="staff-hero">
+        <div class="container position-relative">
+            <div class="row align-items-center gy-5">
+                <div class="col-lg-7">
+                    <span class="badge-pill">
+                        <i class="bi bi-shield-plus me-1"></i> Equipo Médico Certificado
+                    </span>
+                    <h1>Nuestro <span>Staff Médico</span></h1>
+                    <p>Profesionales de salud altamente capacitados, comprometidos con brindarte la mejor atención. Cada médico es seleccionado por su experiencia y vocación de servicio.</p>
+                </div>
+                <div class="col-lg-5">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="hero-stat">
+                                <div class="num" th:text="${medicos != null ? medicos.size() : 0}">0</div>
+                                <div class="label">Médicos Activos</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="hero-stat">
+                                <div class="num">25+</div>
+                                <div class="label">Años de Experiencia</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="hero-stat">
+                                <div class="num">10+</div>
+                                <div class="label">Especialidades</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="hero-stat">
+                                <div class="num">24/7</div>
+                                <div class="label">Urgencias</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <a th:href="@{/}" class="btn btn-secondary">Volver al Inicio</a>
+    <!-- ═══════════════════════════════════════
+         STAFF GRID
+    ═══════════════════════════════════════ -->
+    <section class="staff-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <span class="section-eyebrow">Nuestro Equipo</span>
+                <h2 class="section-title">Médicos <span style="color:var(--primary)">Especialistas</span></h2>
+                <p class="text-muted" style="max-width:520px; margin:0 auto;">
+                    Conoce a los profesionales que conforman nuestro staff médico, listos para cuidar de tu salud y la de tu familia.
+                </p>
+            </div>
+
+            <!-- CARDS DE MÉDICOS -->
+            <div class="row g-4" th:if="${medicos != null and !medicos.isEmpty()}">
+                <div class="col-md-6 col-lg-4" th:each="u : ${medicos}">
+                    <div class="doctor-card">
+                        <div class="doctor-avatar">
+                            <!-- Iniciales del médico -->
+                            <div class="avatar-circle"
+                                 th:text="${u.persona != null and u.persona.nombres != null ? u.persona.nombres.substring(0,1).toUpperCase() + (u.persona.apellidos != null and u.persona.apellidos.length() > 0 ? u.persona.apellidos.substring(0,1).toUpperCase() : '') : 'M'}">
+                                M
+                            </div>
+                            <span class="status-badge">
+                                <i class="bi bi-circle-fill me-1" style="font-size:0.5rem;"></i> Activo
+                            </span>
+                        </div>
+                        <div class="doctor-body">
+                            <div class="doctor-name"
+                                 th:text="${u.persona != null ? (u.persona.nombres ?: '') + ' ' + (u.persona.apellidos ?: '') : 'Nombre no disponible'}">
+                                Nombre Médico
+                            </div>
+                            <div class="doctor-specialty">
+                                <i class="bi bi-heart-pulse"></i>
+                                Médico General
+                            </div>
+
+                            <div class="doctor-info-row" th:if="${u.persona != null and u.persona.correo != null}">
+                                <i class="bi bi-envelope"></i>
+                                <span th:text="${u.persona.correo}">correo@clinica.com</span>
+                            </div>
+                            <div class="doctor-info-row" th:if="${u.persona != null and u.persona.telefono != null}">
+                                <i class="bi bi-telephone"></i>
+                                <span th:text="${u.persona.telefono}">+51 999 000 000</span>
+                            </div>
+                            <div class="doctor-info-row" th:if="${u.persona != null and u.persona.genero != null}">
+                                <i class="bi bi-person"></i>
+                                <span th:text="${u.persona.genero}">Género</span>
+                            </div>
+
+                            <hr class="doctor-divider">
+
+                            <div class="doctor-action">
+                                <a th:href="@{/login}" class="btn-cita">
+                                    <i class="bi bi-calendar-plus"></i> Agendar Cita
+                                </a>
+                                <span class="doctor-id" th:text="'# ' + u.idUsuario"># ID</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ESTADO VACÍO -->
+            <div class="empty-state" th:if="${medicos == null or medicos.isEmpty()}">
+                <div class="empty-icon">
+                    <i class="bi bi-people"></i>
+                </div>
+                <h3 style="font-size:1.5rem; margin-bottom:10px;">Sin médicos disponibles</h3>
+                <p class="text-muted" style="max-width:400px; margin: 0 auto 24px;">
+                    Por el momento no hay médicos registrados en el sistema. Por favor, intenta más tarde.
+                </p>
+                <a th:href="@{/}" class="btn btn-primary-custom">
+                    <i class="bi bi-house me-2"></i>Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════
+         FOOTER
+    ═══════════════════════════════════════ -->
+    <footer>
+        <div class="container">
+            <div class="row gy-4">
+                <div class="col-lg-4">
+                    <img th:src="@{/img/logo.jpg}" alt="Clínica María del Socorro" class="footer-logo">
+                    <p>Brindando salud y bienestar con la calidez y experiencia que tú y tu familia merecen. Más de 25 años sirviendo a la comunidad.</p>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <h5 class="footer-title">Enlaces Rápidos</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <ul class="footer-links">
+                                <li><a th:href="@{/}#nosotros">Nosotros</a></li>
+                                <li><a th:href="@{/staff}">Staff Médico</a></li>
+                                <li><a th:href="@{/}#especialidades">Especialidades</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul class="footer-links">
+                                <li><a th:href="@{/login}">Iniciar Sesión</a></li>
+                                <li><a th:href="@{/}#contacto">Contacto</a></li>
+                                <li><a href="#">Urgencias</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <h5 class="footer-title">Contacto</h5>
+                    <ul class="footer-links">
+                        <li><i class="bi bi-geo-alt me-2 text-info"></i>Av. San Martín 123, Ica, Perú</li>
+                        <li><i class="bi bi-telephone me-2 text-info"></i>(056) 220 079 / 996 220 079</li>
+                        <li><i class="bi bi-envelope me-2 text-info"></i>contacto@clinicamariasocorro.pe</li>
+                        <li><i class="bi bi-clock me-2 text-info"></i>Urgencias 24/7</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright text-center">
+                <p class="mb-0">&copy; 2026 Clínica María del Socorro. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('mainNavbar');
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
 </body>
 </html>

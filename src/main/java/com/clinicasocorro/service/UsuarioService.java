@@ -17,7 +17,7 @@ public class UsuarioService {
      * y cuyo estado sea "ACTIVO" (o el valor que uses en tu BD).
      */
     public List<Usuario> listarStaffMedicoActivo() {
-        // Cambiamos "ACTIVO" por 1 (o el número que uses en tu BD para activo)
-        return usuarioRepository.findByRolAndEstado("MEDICO", 1);
+        // El rol en BD se guarda como "ROLE_MEDICO" (con prefijo ROLE_)
+        return usuarioRepository.findByRolAndEstado("ROLE_MEDICO", 1);
     }
 }
