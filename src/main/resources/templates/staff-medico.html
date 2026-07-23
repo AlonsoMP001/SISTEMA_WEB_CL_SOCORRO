@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Médico - Clínica María del Socorro</title>
-    <meta name="description" content="Conoce a nuestro equipo de médicos especialistas en la Clínica María del Socorro. Profesionales de primer nivel comprometidos con tu salud.">
+    <meta name="description"
+        content="Conoce a nuestro equipo de médicos especialistas en la Clínica María del Socorro. Profesionales de primer nivel comprometidos con tu salud.">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
@@ -27,7 +31,9 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             font-family: var(--font-base);
@@ -36,24 +42,31 @@
             overflow-x: hidden;
         }
 
-        h1, h2, h3, h4, h5, h6 {
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
             font-family: var(--font-display);
             font-weight: 700;
         }
 
         /* ─── NAVBAR ─── */
         .navbar {
-            background-color: rgba(255,255,255,0.92);
+            background-color: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(226,232,240,0.8);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
             transition: var(--transition);
             padding: 15px 0;
         }
+
         .navbar.scrolled {
             padding: 10px 0;
-            box-shadow: 0 4px 20px -2px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.06);
         }
+
         .nav-link {
             color: var(--text-body) !important;
             font-weight: 500;
@@ -62,10 +75,13 @@
             border-radius: 8px;
             transition: var(--transition);
         }
-        .nav-link:hover, .nav-link.active {
+
+        .nav-link:hover,
+        .nav-link.active {
             color: var(--primary) !important;
             background-color: var(--primary-light);
         }
+
         .btn-primary-custom {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             border: none;
@@ -73,14 +89,15 @@
             font-weight: 600;
             padding: 10px 24px;
             border-radius: 30px;
-            box-shadow: 0 4px 14px 0 rgba(2,132,199,0.3);
+            box-shadow: 0 4px 14px 0 rgba(2, 132, 199, 0.3);
             transition: var(--transition);
             text-decoration: none;
             display: inline-block;
         }
+
         .btn-primary-custom:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px 0 rgba(2,132,199,0.4);
+            box-shadow: 0 6px 20px 0 rgba(2, 132, 199, 0.4);
         }
 
         /* ─── HERO ─── */
@@ -90,46 +107,53 @@
             position: relative;
             overflow: hidden;
         }
+
         .staff-hero::before {
             content: '';
             position: absolute;
             inset: 0;
             background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
+
         .staff-hero .badge-pill {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             color: #bae6fd;
             padding: 6px 16px;
             border-radius: 50px;
             font-size: 0.8rem;
             font-weight: 600;
             letter-spacing: 0.5px;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             display: inline-block;
             margin-bottom: 18px;
         }
+
         .staff-hero h1 {
             font-size: clamp(2rem, 5vw, 3.2rem);
             color: white;
             margin-bottom: 16px;
         }
+
         .staff-hero h1 span {
             background: linear-gradient(90deg, #38bdf8, #7dd3fc);
-            -webkit-background-clip: text;
+            /* -webkit-background-clip: text; */
             -webkit-text-fill-color: transparent;
         }
+
         .staff-hero p {
             color: #94a3b8;
             font-size: 1.05rem;
             max-width: 560px;
         }
+
         .hero-stat {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 16px;
             padding: 20px 28px;
             text-align: center;
         }
+
         .hero-stat .num {
             font-family: var(--font-display);
             font-size: 2rem;
@@ -137,6 +161,7 @@
             color: #38bdf8;
             line-height: 1;
         }
+
         .hero-stat .label {
             color: #94a3b8;
             font-size: 0.82rem;
@@ -148,6 +173,7 @@
             padding: 80px 0;
             background: var(--bg-light);
         }
+
         .section-eyebrow {
             color: var(--primary);
             font-weight: 700;
@@ -155,6 +181,7 @@
             letter-spacing: 2px;
             text-transform: uppercase;
         }
+
         .section-title {
             font-size: clamp(1.6rem, 3vw, 2.4rem);
             color: var(--text-main);
@@ -166,16 +193,18 @@
             background: white;
             border-radius: 20px;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(15,23,42,0.06);
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
             transition: var(--transition);
-            border: 1px solid rgba(226,232,240,0.8);
+            border: 1px solid rgba(226, 232, 240, 0.8);
             height: 100%;
         }
+
         .doctor-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 16px 40px rgba(2,132,199,0.14);
-            border-color: rgba(2,132,199,0.2);
+            box-shadow: 0 16px 40px rgba(2, 132, 199, 0.14);
+            border-color: rgba(2, 132, 199, 0.2);
         }
+
         .doctor-avatar {
             background: linear-gradient(135deg, var(--primary-light) 0%, #dbeafe 100%);
             padding: 32px 0 20px;
@@ -183,6 +212,7 @@
             flex-direction: column;
             align-items: center;
         }
+
         .avatar-circle {
             width: 88px;
             height: 88px;
@@ -195,9 +225,10 @@
             font-size: 2rem;
             font-weight: 800;
             color: white;
-            box-shadow: 0 8px 24px rgba(2,132,199,0.3);
+            box-shadow: 0 8px 24px rgba(2, 132, 199, 0.3);
             margin-bottom: 12px;
         }
+
         .status-badge {
             background: #dcfce7;
             color: #166534;
@@ -207,15 +238,18 @@
             border-radius: 50px;
             border: 1px solid #bbf7d0;
         }
+
         .doctor-body {
             padding: 22px 24px 26px;
         }
+
         .doctor-name {
             font-size: 1.15rem;
             font-weight: 700;
             color: var(--text-main);
             margin-bottom: 4px;
         }
+
         .doctor-specialty {
             display: inline-flex;
             align-items: center;
@@ -228,6 +262,7 @@
             border-radius: 50px;
             margin-bottom: 14px;
         }
+
         .doctor-info-row {
             display: flex;
             align-items: flex-start;
@@ -236,23 +271,27 @@
             font-size: 0.85rem;
             color: var(--text-body);
         }
+
         .doctor-info-row i {
             color: var(--primary);
             font-size: 1rem;
             margin-top: 1px;
             flex-shrink: 0;
         }
+
         .doctor-divider {
             border: none;
             height: 1px;
             background: #f1f5f9;
             margin: 14px 0;
         }
+
         .doctor-action {
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
+
         .btn-cita {
             background: var(--primary);
             color: white;
@@ -267,11 +306,13 @@
             align-items: center;
             gap: 6px;
         }
+
         .btn-cita:hover {
             background: var(--primary-dark);
             color: white;
             transform: translateY(-1px);
         }
+
         .doctor-id {
             color: #cbd5e1;
             font-size: 0.75rem;
@@ -283,6 +324,7 @@
             text-align: center;
             padding: 80px 20px;
         }
+
         .empty-icon {
             width: 96px;
             height: 96px;
@@ -293,6 +335,7 @@
             justify-content: center;
             margin: 0 auto 24px;
         }
+
         .empty-icon i {
             font-size: 2.5rem;
             color: var(--primary);
@@ -305,25 +348,58 @@
             padding: 60px 0 30px;
             border-top: 1px solid #1e293b;
         }
+
         .footer-title {
             color: white;
             font-size: 1.05rem;
             margin-bottom: 20px;
             font-weight: 600;
         }
-        .footer-logo { filter: brightness(0) invert(1); max-height: 40px; margin-bottom: 16px; }
-        .footer-links { list-style: none; padding: 0; margin: 0; }
-        .footer-links li { margin-bottom: 10px; }
-        .footer-links a { color: #94a3b8; text-decoration: none; transition: var(--transition); font-size: 0.9rem; }
-        .footer-links a:hover { color: white; padding-left: 4px; }
-        .copyright { border-top: 1px solid #1e293b; padding-top: 24px; margin-top: 50px; font-size: 0.85rem; }
+
+        .footer-logo {
+            filter: brightness(0) invert(1);
+            max-height: 40px;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 4px;
+        }
+
+        .copyright {
+            border-top: 1px solid #1e293b;
+            padding-top: 24px;
+            margin-top: 50px;
+            font-size: 0.85rem;
+        }
 
         /* ─── RESPONSIVE ─── */
         @media (max-width: 991.98px) {
-            .staff-hero { padding: 90px 0 60px; }
+            .staff-hero {
+                padding: 90px 0 60px;
+            }
         }
     </style>
 </head>
+
 <body>
 
     <!-- ═══════════════════════════════════════
@@ -334,9 +410,9 @@
             <a class="navbar-brand d-flex align-items-center" th:href="@{/}">
                 <img th:src="@{/img/logo.jpg}" alt="Clínica María del Socorro" height="45">
             </a>
-            <button class="navbar-toggler border-0" type="button"
-                    data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                    aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-center" id="navbarContent">
@@ -364,7 +440,8 @@
                         <i class="bi bi-shield-plus me-1"></i> Equipo Médico Certificado
                     </span>
                     <h1>Nuestro <span>Staff Médico</span></h1>
-                    <p>Profesionales de salud altamente capacitados, comprometidos con brindarte la mejor atención. Cada médico es seleccionado por su experiencia y vocación de servicio.</p>
+                    <p>Profesionales de salud altamente capacitados, comprometidos con brindarte la mejor atención. Cada
+                        médico es seleccionado por su experiencia y vocación de servicio.</p>
                 </div>
                 <div class="col-lg-5">
                     <div class="row g-3">
@@ -407,7 +484,8 @@
                 <span class="section-eyebrow">Nuestro Equipo</span>
                 <h2 class="section-title">Médicos <span style="color:var(--primary)">Especialistas</span></h2>
                 <p class="text-muted" style="max-width:520px; margin:0 auto;">
-                    Conoce a los profesionales que conforman nuestro staff médico, listos para cuidar de tu salud y la de tu familia.
+                    Conoce a los profesionales que conforman nuestro staff médico, listos para cuidar de tu salud y la
+                    de tu familia.
                 </p>
             </div>
 
@@ -418,7 +496,7 @@
                         <div class="doctor-avatar">
                             <!-- Iniciales del médico -->
                             <div class="avatar-circle"
-                                 th:text="${u.persona != null and u.persona.nombres != null ? u.persona.nombres.substring(0,1).toUpperCase() + (u.persona.apellidos != null and u.persona.apellidos.length() > 0 ? u.persona.apellidos.substring(0,1).toUpperCase() : '') : 'M'}">
+                                th:text="${u.persona != null and u.persona.nombres != null ? u.persona.nombres.substring(0,1).toUpperCase() + (u.persona.apellidos != null and u.persona.apellidos.length() > 0 ? u.persona.apellidos.substring(0,1).toUpperCase() : '') : 'M'}">
                                 M
                             </div>
                             <span class="status-badge">
@@ -427,7 +505,7 @@
                         </div>
                         <div class="doctor-body">
                             <div class="doctor-name"
-                                 th:text="${u.persona != null ? (u.persona.nombres ?: '') + ' ' + (u.persona.apellidos ?: '') : 'Nombre no disponible'}">
+                                th:text="${u.persona != null ? (u.persona.nombres ?: '') + ' ' + (u.persona.apellidos ?: '') : 'Nombre no disponible'}">
                                 Nombre Médico
                             </div>
                             <div class="doctor-specialty">
@@ -485,7 +563,8 @@
             <div class="row gy-4">
                 <div class="col-lg-4">
                     <img th:src="@{/img/logo.jpg}" alt="Clínica María del Socorro" class="footer-logo">
-                    <p>Brindando salud y bienestar con la calidez y experiencia que tú y tu familia merecen. Más de 25 años sirviendo a la comunidad.</p>
+                    <p>Brindando salud y bienestar con la calidez y experiencia que tú y tu familia merecen. Más de 25
+                        años sirviendo a la comunidad.</p>
                 </div>
                 <div class="col-md-6 col-lg-4">
                     <h5 class="footer-title">Enlaces Rápidos</h5>
@@ -532,4 +611,5 @@
         });
     </script>
 </body>
+
 </html>

@@ -50,8 +50,8 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Retorna el rol del usuario con el prefijo ROLE_ (estándar de Spring Security)
-        return Collections.singleton(new SimpleGrantedAuthority("ROLE_" + rol.getNombreRol()));
+        // Retorna el rol del usuario (el string en BD ya tiene el prefijo ROLE_)
+        return Collections.singleton(new SimpleGrantedAuthority(rol.getNombreRol()));
     }
 
     @Override

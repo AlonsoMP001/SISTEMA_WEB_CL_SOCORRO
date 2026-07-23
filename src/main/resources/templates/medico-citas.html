@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Citas - Clínica María del Socorro</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #0284c7; --primary-light: #e0f2fe; --text-main: #0f172a; --bg-light: #f8fafc; --font-base: 'Poppins', sans-serif; }
+        body { font-family: var(--font-base); background-color: var(--bg-light); color: var(--text-main); }
+        .navbar { background-color: white; border-bottom: 1px solid #e2e8f0; }
+        .nav-link { color: #475569; font-weight: 500; }
+        .nav-link.active { color: var(--primary); background-color: var(--primary-light); border-radius: 8px; }
+        .card { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05); }
+        .table th { background-color: #f1f5f9; color: #475569; font-weight: 600; border-bottom: none; }
+        .table td { vertical-align: middle; }
+        .badge-estado { padding: 6px 12px; border-radius: 50px; font-weight: 500; font-size: 0.8rem; }
+        .estado-programada { background-color: #dbeafe; color: #1e40af; }
+        .estado-atendida { background-color: #dcfce7; color: #166534; }
+        .estado-cancelada { background-color: #fee2e2; color: #991b1b; }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" style="color:var(--primary)" href="#">Panel Médico</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/medico/perfil}">Mi Perfil</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/medico/citas}">Mis Citas</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/medico/horarios}">Mis Horarios</a></li>
+                </ul>
+                <div class="d-flex">
+                    <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="mb-4 fw-bold" style="font-family: 'Outfit', sans-serif;">Agenda de Citas</h2>
+        
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Fecha y Hora</th>
+                                <th>Paciente</th>
+                                <th>DNI Paciente</th>
+                                <th>Consultorio</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:if="${citas == null or citas.isEmpty()}">
+                                <td colspan="6" class="text-center py-4 text-muted">No tienes citas programadas.</td>
+                            </tr>
+                            <tr th:each="cita : ${citas}">
+                                <td>
+                                    <div class="fw-bold" th:text="${cita.fechaCita}">2026-08-01</div>
+                                    <div class="text-muted small" th:text="${cita.horaCita}">09:00</div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold" th:text="${cita.paciente.nombres + ' ' + cita.paciente.apellidos}">Nombre Paciente</div>
+                                </td>
+                                <td th:text="${cita.paciente.dni}">12345678</td>
+                                <td>
+                                    <div th:text="${cita.consultorio.numeroConsultorio}">101-A</div>
+                                    <div class="text-muted small" th:text="${cita.consultorio.sede.nombreSede}">Sede</div>
+                                </td>
+                                <td>
+                                    <span class="badge-estado" 
+                                          th:classappend="${cita.estadoCita == 'PROGRAMADA' ? 'estado-programada' : (cita.estadoCita == 'ATENDIDA' ? 'estado-atendida' : 'estado-cancelada')}"
+                                          th:text="${cita.estadoCita}">PROGRAMADA</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" th:disabled="${cita.estadoCita != 'PROGRAMADA'}">
+                                        <i class="bi bi-file-medical"></i> Atender
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
