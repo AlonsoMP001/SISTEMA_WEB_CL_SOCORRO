@@ -50,8 +50,11 @@ public class Usuario implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Retorna el rol del usuario (el string en BD ya tiene el prefijo ROLE_)
-        return Collections.singleton(new SimpleGrantedAuthority(rol.getNombreRol()));
+        String roleName = rol.getNombreRol();
+        if (!roleName.startsWith("ROLE_")) {
+            roleName = "ROLE_" + roleName;
+        }
+        return Collections.singleton(new SimpleGrantedAuthority(roleName));
     }
 
     @Override

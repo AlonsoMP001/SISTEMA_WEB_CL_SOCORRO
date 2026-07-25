@@ -43,4 +43,47 @@ public class MedicoService {
     public List<HorarioMedico> getHorariosByMedico(Medico medico) {
         return horarioMedicoRepository.findByMedicoOrderByDiaSemanaAscHoraInicioAsc(medico);
     }
+
+    @Autowired
+    private com.clinicasocorro.repository.HistoriaClinicaRepository historiaClinicaRepository;
+    
+    @Autowired
+    private com.clinicasocorro.repository.AtencionMedicaRepository atencionMedicaRepository;
+    
+    @Autowired
+    private com.clinicasocorro.repository.DiagnosticoAtencionRepository diagnosticoAtencionRepository;
+
+    @org.springframework.transaction.annotation.Transactional
+    public void atenderCita(Long idCita, com.clinicasocorro.entity.AtencionMedica atencion, com.clinicasocorro.entity.DiagnosticoAtencion diagnostico) {
+        Cita cita = citaRepository.findById(idCita).orElseThrow(() -> new RuntimeException("Cita no encontrada"));
+        
+        // 1. Obtener o crear Historia Clínica para el paciente
+        com.clinicasocorro.entity.HistoriaClinica hc = historiaClinicaRepository.findByPaciente(cita.getPaciente())
+            .orElseGet(() -> {
+                com.clinicasocorro.entity.HistoriaClinica nuevaHc = new com.clinicasocorro.entity.HistoriaClinica();
+                nuevaHc.setPaciente(cita.getPaciente());
+                // Generar número de historia simple
+                nuevaHc.setNroHistoria("HC-" + cita.getPaciente().getDni());
+                return historiaClinicaRepository.save(nuevaHc);
+            });
+            
+        // 2. Guardar Atención Médica
+        atencion.setCita(cita);
+        atencion.setMedico(cita.getMedico());
+        atencion.setHistoriaClinica(hc);
+        atencion.setFechaAtencion(java.time.LocalDateTime.now());
+        com.clinicasocorro.entity.AtencionMedica savedAtencion = atencionMedicaRepository.save(atencion);
+        
+        // 3. Guardar Diagnóstico
+        diagnostico.setAtencionMedica(savedAtencion);
+        diagnosticoAtencionRepository.save(diagnostico);
+        
+        // 4. Actualizar estado de la Cita
+        cita.setEstadoCita("ATENDIDA");
+        citaRepository.save(cita);
+    }
+
+    public List<com.clinicasocorro.entity.AtencionMedica> getHistorialAtenciones(Medico medico) {
+        return atencionMedicaRepository.findByMedicoOrderByFechaAtencionDesc(medico);
+    }
 }

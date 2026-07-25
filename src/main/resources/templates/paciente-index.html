@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil Paciente - Clínica María del Socorro</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root { --primary: #059669; --primary-dark: #047857; --primary-light: #d1fae5; --text-main: #0f172a; --text-body: #475569; --bg-light: #f8fafc; --font-display: 'Outfit', sans-serif; --font-base: 'Poppins', sans-serif; }
+        body { font-family: var(--font-base); background-color: var(--bg-light); color: var(--text-main); }
+        .navbar { background-color: white; border-bottom: 1px solid #e2e8f0; }
+        .nav-link { color: var(--text-body); font-weight: 500; }
+        .nav-link.active { color: var(--primary); background-color: var(--primary-light); border-radius: 8px; }
+        .card { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05); }
+        .profile-header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 40px 20px; border-radius: 16px 16px 0 0; text-align: center; }
+        .profile-avatar { width: 120px; height: 120px; background-color: white; color: var(--primary); font-size: 3rem; font-family: var(--font-display); font-weight: 800; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; border: 4px solid #a7f3d0; margin-bottom: 15px; }
+        .info-label { font-size: 0.85rem; color: var(--text-body); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .info-value { font-size: 1.1rem; font-weight: 500; color: var(--text-main); margin-bottom: 20px; }
+        .dashboard-card { transition: transform 0.3s ease; text-decoration: none; color: inherit; display: block;}
+        .dashboard-card:hover { transform: translateY(-5px); color: inherit; }
+        .dashboard-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" style="color:var(--primary)" href="#">Portal Paciente</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/paciente/index}">Mi Perfil</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/paciente/citas}">Mis Citas</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/paciente/medicos}">Médicos</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/paciente/historial}">Historial Médico</a></li>
+                </ul>
+                <div class="d-flex">
+                    <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="profile-header">
+                        <div class="profile-avatar" th:text="${paciente.nombres.substring(0,1)} + ${paciente.apellidos.substring(0,1)}">PA</div>
+                        <h2 th:text="${paciente.nombres} + ' ' + ${paciente.apellidos}">Nombre Apellido</h2>
+                        <p class="mb-0 fs-5">Paciente</p>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row text-center mt-3">
+                            <div class="col-md-4 mb-4">
+                                <a th:href="@{/paciente/citas}" class="dashboard-card card p-4 h-100 bg-light">
+                                    <i class="bi bi-calendar-check dashboard-icon"></i>
+                                    <h5>Mis Citas</h5>
+                                    <p class="text-muted small">Agendar, cancelar o visualizar citas médicas.</p>
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <a th:href="@{/paciente/medicos}" class="dashboard-card card p-4 h-100 bg-light">
+                                    <i class="bi bi-people dashboard-icon"></i>
+                                    <h5>Staff Médico</h5>
+                                    <p class="text-muted small">Ver los médicos disponibles y sus especialidades.</p>
+                                </a>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <a th:href="@{/paciente/historial}" class="dashboard-card card p-4 h-100 bg-light">
+                                    <i class="bi bi-file-medical dashboard-icon"></i>
+                                    <h5>Historial Clínico</h5>
+                                    <p class="text-muted small">Revisar atenciones pasadas y diagnósticos.</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card p-4">
+                    <h4 class="mb-4">Información Personal</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="info-label">DNI</div>
+                            <div class="info-value" th:text="${paciente.dni}">12345678</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="info-label">Correo Electrónico</div>
+                            <div class="info-value" th:text="${paciente.correo}">correo@ejemplo.com</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="info-label">Teléfono</div>
+                            <div class="info-value" th:text="${paciente.telefono}">999888777</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

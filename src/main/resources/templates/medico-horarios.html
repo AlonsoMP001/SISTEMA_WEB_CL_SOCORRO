@@ -17,10 +17,40 @@
         .navbar { background-color: white; border-bottom: 1px solid #e2e8f0; }
         .nav-link { color: #475569; font-weight: 500; }
         .nav-link.active { color: var(--primary); background-color: var(--primary-light); border-radius: 8px; }
-        .card { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05); }
-        .table th { background-color: #f1f5f9; color: #475569; font-weight: 600; border-bottom: none; }
-        .table td { vertical-align: middle; }
-        .day-badge { background-color: var(--primary-light); color: var(--primary-dark); padding: 5px 12px; border-radius: 6px; font-weight: 600; font-size: 0.9rem; }
+        
+        .schedule-card { 
+            background: white; 
+            border-radius: 16px; 
+            border: 1px solid #e2e8f0; 
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            height: 100%;
+        }
+        .schedule-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
+            border-color: #bae6fd;
+        }
+        .day-header {
+            background: linear-gradient(135deg, var(--primary), #0369a1);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px 15px 0 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+        .time-badge {
+            background: #f1f5f9;
+            color: #334155;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+        }
     </style>
 </head>
 
@@ -36,6 +66,7 @@
                     <li class="nav-item"><a class="nav-link" th:href="@{/medico/perfil}">Mi Perfil</a></li>
                     <li class="nav-item"><a class="nav-link" th:href="@{/medico/citas}">Mis Citas</a></li>
                     <li class="nav-item"><a class="nav-link active" th:href="@{/medico/horarios}">Mis Horarios</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/medico/historial}">Historial Médico</a></li>
                 </ul>
                 <div class="d-flex">
                     <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">Cerrar Sesión</a>
@@ -44,44 +75,41 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <h2 class="mb-4 fw-bold" style="font-family: 'Outfit', sans-serif;">Horarios Asignados</h2>
+    <div class="container mt-5 mb-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold m-0" style="font-family: 'Outfit', sans-serif;">Horarios Asignados</h2>
+            <p class="text-muted mt-2">Días y horas de atención configurados por administración</p>
+        </div>
         
-        <div class="card">
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th>Día de la Semana</th>
-                                <th>Horario</th>
-                                <th>Sede</th>
-                                <th>Dirección</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:if="${horarios == null or horarios.isEmpty()}">
-                                <td colspan="4" class="text-center py-4 text-muted">No tienes horarios asignados.</td>
-                            </tr>
-                            <tr th:each="horario : ${horarios}">
-                                <td>
-                                    <span class="day-badge" 
-                                          th:text="${horario.diaSemana == 1 ? 'Lunes' : (horario.diaSemana == 2 ? 'Martes' : (horario.diaSemana == 3 ? 'Miércoles' : (horario.diaSemana == 4 ? 'Jueves' : (horario.diaSemana == 5 ? 'Viernes' : (horario.diaSemana == 6 ? 'Sábado' : 'Domingo')))))}">
-                                        Lunes
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="fw-bold"><i class="bi bi-clock me-1"></i> <span th:text="${horario.horaInicio}">08:00</span> - <span th:text="${horario.horaFin}">13:00</span></div>
-                                </td>
-                                <td>
-                                    <div class="fw-bold text-primary" th:text="${horario.sede.nombreSede}">Sede Principal</div>
-                                </td>
-                                <td>
-                                    <div class="text-muted small" th:text="${horario.sede.direccion}">Dirección</div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <div th:if="${horarios == null or horarios.isEmpty()}" class="text-center py-5">
+            <i class="bi bi-calendar-x text-muted" style="font-size: 4rem;"></i>
+            <h4 class="mt-3 text-muted">No tienes horarios asignados</h4>
+            <p class="text-muted">Comunícate con la administración de la clínica para que te asignen un turno.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-6 col-lg-4" th:each="horario : ${horarios}">
+                <div class="schedule-card">
+                    <div class="day-header">
+                        <i class="bi bi-calendar-check me-2 fs-5"></i>
+                        <span th:text="${horario.diaSemana == 1 ? 'Lunes' : (horario.diaSemana == 2 ? 'Martes' : (horario.diaSemana == 3 ? 'Miércoles' : (horario.diaSemana == 4 ? 'Jueves' : (horario.diaSemana == 5 ? 'Viernes' : (horario.diaSemana == 6 ? 'Sábado' : 'Domingo')))))}">
+                            Día
+                        </span>
+                    </div>
+                    <div class="p-4">
+                        <div class="mb-4">
+                            <span class="text-muted d-block small fw-bold text-uppercase mb-2">Turno</span>
+                            <div class="time-badge">
+                                <i class="bi bi-clock me-2 text-primary"></i> 
+                                <span th:text="${horario.horaInicio}">08:00</span> - <span th:text="${horario.horaFin}">13:00</span>
+                            </div>
+                        </div>
+                        <div class="pt-3 border-top border-dashed">
+                            <span class="text-muted d-block small fw-bold text-uppercase mb-1">Ubicación</span>
+                            <div class="fw-bold text-primary fs-5" th:text="${horario.sede.nombreSede}">Sede Principal</div>
+                            <div class="text-muted small mt-1"><i class="bi bi-geo-alt-fill me-1"></i> <span th:text="${horario.sede.direccion}">Dirección</span></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

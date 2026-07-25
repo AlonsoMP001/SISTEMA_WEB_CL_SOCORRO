@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="UTF-8">
@@ -536,7 +536,18 @@
                 </ul>
             </div>
             <div class="d-none d-lg-flex align-items-center">
-                <a th:href="@{/login}" class="btn btn-primary-custom">INICIAR SESIÓN</a>
+                <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-primary-custom">INICIAR SESIÓN</a>
+                <div sec:authorize="isAuthenticated()" class="dropdown">
+                    <button class="btn btn-primary-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle me-1"></i> <span sec:authentication="name">Usuario</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-2">
+                        <li sec:authorize="hasAuthority('ROLE_PACIENTE')"><a class="dropdown-item py-2" th:href="@{/paciente/index}"><i class="bi bi-house-heart me-2"></i>Mi Portal</a></li>
+                        <li sec:authorize="hasAuthority('ROLE_MEDICO')"><a class="dropdown-item py-2" th:href="@{/medico/perfil}"><i class="bi bi-hospital me-2"></i>Mi Portal</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger py-2" th:href="@{/logout}"><i class="bi bi-box-arrow-right me-2"></i>Cerrar Sesión</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -559,7 +570,10 @@
                             de primer nivel dedicados a cuidar de ti y de toda tu familia.
                         </p>
                         <div class="d-flex flex-column flex-sm-row gap-3">
-                            <a th:href="@{/login}" class="btn btn-primary-custom px-4 py-3">
+                            <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-primary-custom px-4 py-3">
+                                <i class="bi bi-calendar-event me-2"></i>Agendar Cita Online
+                            </a>
+                            <a sec:authorize="hasAuthority('ROLE_PACIENTE')" th:href="@{/paciente/citas}" class="btn btn-primary-custom px-4 py-3">
                                 <i class="bi bi-calendar-event me-2"></i>Agendar Cita Online
                             </a>
                             <a href="#especialidades" class="btn btn-outline-custom px-4 py-3">
@@ -721,8 +735,11 @@
                 Regístrate o inicia sesión en nuestro portal de pacientes para seleccionar tu especialidad, elegir a tu
                 médico de preferencia y agendar tu cita rápidamente.
             </p>
-            <a th:href="@{/login}" class="btn btn-cta">
+            <a sec:authorize="!isAuthenticated()" th:href="@{/login}" class="btn btn-cta">
                 <i class="bi bi-box-arrow-in-right me-2"></i>Acceder al Portal de Pacientes
+            </a>
+            <a sec:authorize="hasAuthority('ROLE_PACIENTE')" th:href="@{/paciente/index}" class="btn btn-cta">
+                <i class="bi bi-box-arrow-in-right me-2"></i>Ir a Mi Portal
             </a>
         </div>
     </section>

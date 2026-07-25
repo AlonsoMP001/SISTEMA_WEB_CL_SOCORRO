@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Atenciones - Clínica María del Socorro</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root { 
+            --primary: #0284c7; 
+            --primary-light: #e0f2fe; 
+            --text-main: #0f172a; 
+            --bg-light: #f8fafc; 
+            --font-base: 'Poppins', sans-serif; 
+            --success: #10b981;
+        }
+        body { font-family: var(--font-base); background-color: var(--bg-light); color: var(--text-main); }
+        .navbar { background-color: white; border-bottom: 1px solid #e2e8f0; }
+        .nav-link { color: #475569; font-weight: 500; }
+        .nav-link.active { color: var(--primary); background-color: var(--primary-light); border-radius: 8px; }
+        
+        .card { border: none; border-radius: 16px; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05); }
+        .table th { background-color: #f1f5f9; color: #475569; font-weight: 600; border-bottom: none; border-top: none; padding: 15px;}
+        .table td { vertical-align: middle; padding: 15px; border-bottom: 1px solid #f1f5f9;}
+        .table-hover tbody tr:hover { background-color: #f8fafc; cursor: pointer; transition: 0.2s;}
+        
+        .badge-atendida { background-color: #d1fae5; color: #065f46; padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem;}
+        
+        /* Modal Custom Styles */
+        .modal-content { border-radius: 20px; border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
+        .modal-header { background: linear-gradient(135deg, var(--primary), #0369a1); color: white; border-radius: 20px 20px 0 0; padding: 20px 25px; }
+        .modal-header .btn-close { filter: brightness(0) invert(1); opacity: 0.8; }
+        .modal-header .btn-close:hover { opacity: 1; }
+        
+        .info-box { background: #f8fafc; border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; height: 100%; }
+        .info-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: #64748b; font-weight: 600; margin-bottom: 5px; }
+        .info-value { font-size: 1.1rem; color: #0f172a; font-weight: 500; }
+        
+        .triaje-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
+        .triaje-item { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px; text-align: center; }
+        .triaje-item .val { font-size: 1.25rem; font-weight: 600; color: var(--primary); }
+        .triaje-item .lbl { font-size: 0.75rem; color: #64748b; margin-top: 4px; }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" style="color:var(--primary)" href="#">Panel Médico</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/medico/perfil}">Mi Perfil</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/medico/citas}">Mis Citas</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/medico/horarios}">Mis Horarios</a></li>
+                    <li class="nav-item"><a class="nav-link active" th:href="@{/medico/historial}">Historial Médico</a></li>
+                </ul>
+                <div class="d-flex">
+                    <a th:href="@{/logout}" class="btn btn-outline-danger btn-sm">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5 mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold m-0" style="font-family: 'Outfit', sans-serif;">Historial de Atenciones</h2>
+            <div class="text-muted"><i class="bi bi-info-circle me-1"></i> Haz clic en una fila para ver los detalles de la consulta</div>
+        </div>
+        
+        <div class="card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th>Fecha y Hora</th>
+                                <th>Paciente</th>
+                                <th>DNI</th>
+                                <th>Nro. Historia</th>
+                                <th>Sede</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:if="${atenciones == null or atenciones.isEmpty()}">
+                                <td colspan="6" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                                    Aún no tienes atenciones médicas registradas.
+                                </td>
+                            </tr>
+                            <tr th:each="atencion : ${atenciones}" 
+                                th:onclick="abrirDetalleAtencion([[${atencion.idAtencion}]])"
+                                class="align-middle">
+                                <td>
+                                    <div class="fw-bold"><i class="bi bi-calendar-event me-2 text-primary"></i> <span th:text="${#temporals.format(atencion.fechaAtencion, 'dd/MM/yyyy HH:mm')}"></span></div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold" th:text="${atencion.historiaClinica.paciente.nombres + ' ' + atencion.historiaClinica.paciente.apellidos}">Juan Perez</div>
+                                </td>
+                                <td><span th:text="${atencion.historiaClinica.paciente.dni}"></span></td>
+                                <td><span class="text-muted fw-medium" th:text="${atencion.historiaClinica.nroHistoria}"></span></td>
+                                <td><span th:text="${atencion.cita.consultorio.sede.nombreSede}"></span></td>
+                                <td><span class="badge-atendida"><i class="bi bi-check-circle-fill me-1"></i> Atendida</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Divs ocultos con la data completa para el modal -->
+    <div id="atenciones-data" style="display: none;">
+        <div th:each="atencion : ${atenciones}" class="atencion-item"
+             th:data-id="${atencion.idAtencion}"
+             th:data-fecha="${#temporals.format(atencion.fechaAtencion, 'dd/MM/yyyy HH:mm')}"
+             th:data-paciente="|${atencion.historiaClinica.paciente.nombres} ${atencion.historiaClinica.paciente.apellidos}|"
+             th:data-dni="${atencion.historiaClinica.paciente.dni}"
+             th:data-historia="${atencion.historiaClinica.nroHistoria}"
+             th:data-motivo="${atencion.motivoConsulta}"
+             th:data-presion="${atencion.triajePresion}"
+             th:data-temp="${atencion.triajeTemperatura}"
+             th:data-peso="${atencion.triajePeso}"
+             th:data-sat="${atencion.triajeSaturacion}"
+             th:data-fc="${atencion.triajeFrecuenciaCardiaca}"
+             th:data-diag-cie="${atencion.diagnosticos != null and !atencion.diagnosticos.isEmpty() ? atencion.diagnosticos[0].codigoCie10 : ''}"
+             th:data-diag-desc="${atencion.diagnosticos != null and !atencion.diagnosticos.isEmpty() ? atencion.diagnosticos[0].descripcionDiagnostico : ''}"
+             >
+        </div>
+    </div>
+
+    <!-- Modal Detalles de Atención -->
+    <div class="modal fade" id="detalleModal" tabindex="-1">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header border-0">
+            <h4 class="modal-title fw-bold m-0" style="font-family: 'Outfit', sans-serif;">
+                <i class="bi bi-file-earmark-medical me-2"></i> Reporte Clínico de Atención
+            </h4>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body p-4 p-md-5">
+            
+            <div class="row g-4 mb-4">
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box">
+                        <div class="info-label">Paciente</div>
+                        <div class="info-value" id="detPaciente"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box">
+                        <div class="info-label">DNI</div>
+                        <div class="info-value" id="detDni"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box">
+                        <div class="info-label">Nro. Historia</div>
+                        <div class="info-value text-primary" id="detHistoria"></div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="info-box">
+                        <div class="info-label">Fecha de Atención</div>
+                        <div class="info-value" id="detFecha"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="fw-bold mb-3 border-bottom pb-2 text-primary"><i class="bi bi-clipboard2-pulse me-2"></i> Triaje y Signos Vitales</h5>
+            <div class="triaje-grid mb-4">
+                <div class="triaje-item">
+                    <div class="val" id="detPresion"></div>
+                    <div class="lbl">Presión Arterial</div>
+                </div>
+                <div class="triaje-item">
+                    <div class="val"><span id="detTemp"></span><small class="text-muted ms-1 fs-6">°C</small></div>
+                    <div class="lbl">Temperatura</div>
+                </div>
+                <div class="triaje-item">
+                    <div class="val"><span id="detPeso"></span><small class="text-muted ms-1 fs-6">kg</small></div>
+                    <div class="lbl">Peso</div>
+                </div>
+                <div class="triaje-item">
+                    <div class="val"><span id="detSat"></span><small class="text-muted ms-1 fs-6">%</small></div>
+                    <div class="lbl">Saturación O2</div>
+                </div>
+                <div class="triaje-item">
+                    <div class="val"><span id="detFc"></span><small class="text-muted ms-1 fs-6">bpm</small></div>
+                    <div class="lbl">Frecuencia Cardíaca</div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <h5 class="fw-bold mb-3 border-bottom pb-2 text-primary"><i class="bi bi-chat-square-text me-2"></i> Motivo de Consulta</h5>
+                    <div class="info-box">
+                        <div class="info-value" id="detMotivo" style="font-size: 1rem; line-height: 1.6; white-space: pre-wrap;"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="fw-bold mb-3 border-bottom pb-2 text-primary"><i class="bi bi-bandaid me-2"></i> Diagnóstico (CIE-10)</h5>
+                    <div class="info-box" style="background: #e0f2fe; border-color: #bae6fd;">
+                        <div class="d-flex align-items-center mb-2">
+                            <span class="badge bg-primary fs-6 me-2" id="detCie"></span>
+                            <span class="fw-bold text-primary">Diagnóstico Definitivo</span>
+                        </div>
+                        <div class="info-value fw-medium" id="detDescDiag" style="font-size: 1.05rem;"></div>
+                    </div>
+                </div>
+            </div>
+
+          </div>
+          <div class="modal-footer border-0 p-4">
+            <button type="button" class="btn btn-primary px-4 rounded-pill" data-bs-dismiss="modal">Cerrar Reporte</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var atenciones = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            var items = document.querySelectorAll('.atencion-item');
+            items.forEach(function(el) {
+                atenciones[el.dataset.id] = {
+                    fecha: el.dataset.fecha,
+                    paciente: el.dataset.paciente,
+                    dni: el.dataset.dni,
+                    historia: el.dataset.historia,
+                    motivo: el.dataset.motivo,
+                    presion: el.dataset.presion,
+                    temp: el.dataset.temp,
+                    peso: el.dataset.peso,
+                    sat: el.dataset.sat,
+                    fc: el.dataset.fc,
+                    cie: el.dataset.diagCie,
+                    descDiag: el.dataset.diagDesc
+                };
+            });
+        });
+
+        function abrirDetalleAtencion(id) {
+            var data = atenciones[id];
+            if(data) {
+                document.getElementById('detPaciente').textContent = data.paciente;
+                document.getElementById('detDni').textContent = data.dni;
+                document.getElementById('detHistoria').textContent = data.historia;
+                document.getElementById('detFecha').textContent = data.fecha;
+                
+                document.getElementById('detPresion').textContent = data.presion;
+                document.getElementById('detTemp').textContent = data.temp;
+                document.getElementById('detPeso').textContent = data.peso;
+                document.getElementById('detSat').textContent = data.sat;
+                document.getElementById('detFc').textContent = data.fc;
+                
+                document.getElementById('detMotivo').textContent = data.motivo;
+                document.getElementById('detCie').textContent = data.cie;
+                document.getElementById('detDescDiag').textContent = data.descDiag;
+                
+                var modal = new bootstrap.Modal(document.getElementById('detalleModal'));
+                modal.show();
+            }
+        }
+    </script>
+</body>
+</html>

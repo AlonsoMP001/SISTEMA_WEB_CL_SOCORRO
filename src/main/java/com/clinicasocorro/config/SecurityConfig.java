@@ -19,6 +19,7 @@ public class SecurityConfig {
                         .requestMatchers("/", "/staff", "/css/**", "/js/**", "/img/**", "/login", "/registro")
                         .permitAll() // Rutas públicas
                         .requestMatchers("/medico/**").hasAuthority("ROLE_MEDICO")
+                        .requestMatchers("/paciente/**").hasAuthority("ROLE_PACIENTE")
                         .anyRequest().authenticated() // Todo lo demás requiere login
                 )
                 .formLogin(form -> form
@@ -29,6 +30,9 @@ public class SecurityConfig {
                             for (var authority : authentication.getAuthorities()) {
                                 if (authority.getAuthority().equals("ROLE_MEDICO")) {
                                     redirectUrl = "/medico/perfil";
+                                    break;
+                                } else if (authority.getAuthority().equals("ROLE_PACIENTE")) {
+                                    redirectUrl = "/paciente/index";
                                     break;
                                 } else if (authority.getAuthority().equals("ROLE_ADMINISTRADOR")) {
                                     redirectUrl = "/admin/dashboard"; // Placeholder para el futuro
